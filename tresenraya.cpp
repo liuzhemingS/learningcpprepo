@@ -18,9 +18,24 @@ int main()
     while(running){
         movePlayer(spaces, player);
         drawBoard(spaces);
+        if (checkWinner(spaces, player, computer)){
+            running = false;
+            break;
+        } else if(checkTie(spaces)){
+            running = false;
+            break;
+        }
         moveComputer(spaces, computer);
         drawBoard(spaces);
+        if (checkWinner(spaces, player, computer)){
+            running = false;
+            break;
+        } else if(checkTie(spaces)){
+            running = false;
+            break;
+        }
     }
+    std::cout << "Thanks for playing!\n";
     return 0;
 }
 
@@ -69,23 +84,27 @@ void moveComputer(char *spaces, char computer)
 }
 bool checkTie(char *spaces)
 {
-    return 0;
+    for (int i = 0; i<9;i++){
+        if (spaces[i] == ' ') return false;
+    }
+    std::cout << "IT'S A TIE!\n";
+    return true;
 }
 bool checkWinner(char *spaces, char player, char computer)
 {
     int winPoss[8][3] = {{0,1,2},{3,4,5},{6,7,8},{0,3,6},{1,4,7},{2,5,8,},{2,4,6},{0,4,8}};
-    bool hasWon = false;
     for (int i = 0; i <= 8; i++){
         int x = winPoss[i][0];
         int y = winPoss[i][1];
         int z = winPoss[i][2];
 
-        if (!spaces[x] == ' '&&spaces[x] == spaces[y]&&spaces[y]==spaces[z]){
-            hasWon = true;
+        if (spaces[x] != ' '&&spaces[x] == spaces[y]&&spaces[y]==spaces[z]){
             if (spaces[x] == player){
-                std::cout << "YOU WIN\n";
+                std::cout << "YOU WIN!\n";
+                return true;
             } else{
-                std::cout << "YOU LOOSE\n";
+                std::cout << "YOU LOOSE!\n";
+                return false;
             }
             break;
         }
